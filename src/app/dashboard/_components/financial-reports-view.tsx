@@ -4,6 +4,7 @@ import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
 import { prisma } from "@/lib/prisma";
 import { FinancialReportsCharts } from "./financial-reports-charts";
+import { ExportPdfButton } from "./export-pdf-button";
 import Link from "next/link";
 
 export async function FinancialReportsView() {
@@ -108,10 +109,7 @@ export async function FinancialReportsView() {
             In-depth analysis of fleet expenses, cost distributions, and financial trends.
           </p>
         </div>
-        <button className="flex items-center gap-2 rounded-md bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 hover:text-slate-900 dark:bg-slate-700/50 dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white">
-          <Download className="h-4 w-4" />
-          Export PDF
-        </button>
+        <ExportPdfButton title="TransitOps Financial Report" />
       </div>
 
       {/* Charts Container */}
