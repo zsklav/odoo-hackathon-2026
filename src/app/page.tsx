@@ -1,101 +1,62 @@
+import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
-
-const modules = [
-  {
-    title: "Vehicle Registry",
-    desc: "Fleet master list · unique reg no · status lifecycle",
-    icon: "🚛",
-  },
-  {
-    title: "Driver Management",
-    desc: "Profiles · license validity · safety score · status",
-    icon: "🧑‍✈️",
-  },
-  {
-    title: "Trip Dispatch",
-    desc: "Assign vehicle + driver · rule checks · Draft→Dispatched→Completed",
-    icon: "🗺️",
-  },
-  {
-    title: "Maintenance",
-    desc: "Service logs · auto 'In Shop' · hidden from dispatch",
-    icon: "🔧",
-  },
-  {
-    title: "Fuel & Expenses",
-    desc: "Fuel logs · tolls · auto operational cost per vehicle",
-    icon: "⛽",
-  },
-  {
-    title: "Reports & Analytics",
-    desc: "Fuel efficiency · fleet utilization · ROI · CSV export",
-    icon: "📊",
-  },
-];
-
-const roles = [
-  "Fleet Manager",
-  "Driver",
-  "Safety Officer",
-  "Financial Analyst",
-];
+import { HomeStyles } from "./_components/home/HomeStyles";
+import { HomeBackground } from "./_components/home/HomeBackground";
+import { Hero } from "./_components/home/Hero";
+import { FeaturesSection } from "./_components/home/FeaturesSection";
+import { NAV_LINKS } from "./_components/home/data";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 flex-col items-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="relative w-full max-w-5xl px-6 py-16 sm:py-24">
-        <div className="absolute right-6 top-16 sm:right-8">
-          <ThemeToggle />
-        </div>
-        <span className="inline-block rounded-full border border-black/10 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-white/15 dark:text-zinc-400">
-          Odoo Hackathon 2026 · Virtual Round
-        </span>
+    <div className="relative min-h-screen w-full font-sans text-zinc-900 dark:text-zinc-100">
+      <HomeStyles />
+      <HomeBackground />
 
-        <h1 className="mt-6 text-4xl font-bold tracking-tight text-black sm:text-6xl dark:text-zinc-50">
-          TransitOps
-        </h1>
-        <p className="mt-4 max-w-2xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          A smart transport operations platform — digitize vehicles, drivers,
-          dispatch, maintenance, and expenses with enforced business rules and
-          operational insight.
-        </p>
+      {/* Header */}
+      <header className="sticky top-0 z-20 border-b border-black/[0.06] bg-[#fafafa]/70 backdrop-blur-xl dark:border-white/[0.06] dark:bg-[#090909]/70">
+        <div className="flex h-16 w-full items-center justify-between px-6 sm:px-10 lg:px-16">
+          <div className="flex items-center gap-10">
+            <Link href="/" className="flex items-center gap-2">
+              <span className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-orange-600 text-sm font-bold text-white shadow-[0_0_20px_rgba(249,115,22,0.35)]">
+                T
+              </span>
+              <span className="text-sm font-semibold tracking-tight text-zinc-900 dark:text-white">TransitOps</span>
+            </Link>
+            <nav className="hidden items-center gap-7 md:flex">
+              {NAV_LINKS.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </div>
 
-        <div className="mt-8 flex flex-wrap gap-2">
-          {roles.map((r) => (
-            <span
-              key={r}
-              className="rounded-md bg-black/5 px-2.5 py-1 text-sm text-zinc-700 dark:bg-white/10 dark:text-zinc-300"
+          <div className="flex items-center gap-3">
+            <Link
+              href="/login"
+              className="hidden text-sm font-medium text-zinc-700 transition-colors hover:text-zinc-900 dark:text-zinc-300 dark:hover:text-white sm:block"
             >
-              {r}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {modules.map((m) => (
-            <div
-              key={m.title}
-              className="rounded-xl border border-black/[.08] bg-white p-5 transition-colors hover:border-black/20 dark:border-white/[.12] dark:bg-zinc-900 dark:hover:border-white/25"
+              Sign In
+            </Link>
+            <Link
+              href="/register"
+              className="rounded-lg bg-gradient-to-b from-orange-400 to-orange-600 px-4 py-1.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(249,115,22,0.3)]"
             >
-              <div className="text-2xl">{m.icon}</div>
-              <h2 className="mt-3 font-semibold text-black dark:text-zinc-50">
-                {m.title}
-              </h2>
-              <p className="mt-1 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                {m.desc}
-              </p>
-            </div>
-          ))}
+              Get Started
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
+      </header>
 
-        <p className="mt-14 text-sm text-zinc-500 dark:text-zinc-500">
-          Next.js 16 · React 19 · Tailwind v4 · Prisma + Postgres (planned) ·
-          Auth + RBAC. Edit{" "}
-          <code className="rounded bg-black/5 px-1.5 py-0.5 dark:bg-white/10">
-            src/app/page.tsx
-          </code>{" "}
-          to start.
-        </p>
+      {/* Content */}
+      <main className="w-full px-6 pb-32 sm:px-10 lg:px-16">
+        <Hero />
+        <FeaturesSection />
       </main>
     </div>
   );
