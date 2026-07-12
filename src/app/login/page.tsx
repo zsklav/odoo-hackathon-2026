@@ -6,7 +6,6 @@ import Link from "next/link";
 import { AlertCircle, Eye, EyeOff, Lock, LogIn, Loader2, Mail } from "lucide-react";
 import { AuthBrandingPanel } from "@/components/auth/auth-branding-panel";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -56,11 +55,15 @@ export default function LoginPage() {
     }
 
     setIsSubmitting(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const response = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
     setIsSubmitting(false);
 
-    if (error) {
-      setErrorMessage(error.message);
+    if (!response.ok) {
+      setErrorMessage("Invalid email or password.");
       return;
     }
 

@@ -46,18 +46,18 @@ enum ExpenseType {
   OTHER
 }
 
-/// Read-only reference to public.profiles, populated by a Supabase Auth
-/// trigger (see supabase/migrations/001_profiles.sql). Prisma does not
-/// manage auth.users or this table's inserts/updates.
-model Profile {
-  id        String   @id @db.Uuid
-  fullName  String?  @map("full_name")
-  role      Role     @default(DRIVER)
-  createdAt DateTime @default(now()) @map("created_at")
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  role         Role     @default(DRIVER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   createdTrips Trip[] @relation("TripCreatedBy")
 
-  @@map("profiles")
+  @@map("users")
 }
 
 model Vehicle {
@@ -118,7 +118,7 @@ model Trip {
 
   vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
   driver    Driver  @relation(fields: [driverId], references: [id], onDelete: Restrict)
-  createdBy Profile @relation("TripCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  createdBy User    @relation("TripCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
 
   @@index([vehicleId])
   @@index([driverId])

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   AlertCircle,
-  CheckCircle2,
   Eye,
   EyeOff,
   Loader2,
@@ -16,7 +15,6 @@ import {
 } from "lucide-react";
 import { AuthBrandingPanel } from "@/components/auth/auth-branding-panel";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { supabase } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -44,7 +42,7 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const submitGuardRef = useRef(false);
 
   function validate(): string | null {
     if (!fullName.trim()) return "Full name is required.";
@@ -57,8 +55,8 @@ export default function RegisterPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (submitGuardRef.current) return;
     setErrorMessage(null);
-    setSuccessMessage(null);
 
     const validationError = validate();
     if (validationError) {
@@ -66,30 +64,23 @@ export default function RegisterPage() {
       return;
     }
 
+    submitGuardRef.current = true;
     setIsSubmitting(true);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: fullName,
-          role,
-        },
-      },
+    const response = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, fullName, role }),
     });
+    const result = await response.json();
+    submitGuardRef.current = false;
     setIsSubmitting(false);
 
-    if (error) {
-      setErrorMessage(error.message);
+    if (!response.ok) {
+      setErrorMessage(result.error ?? "Something went wrong. Please try again.");
       return;
     }
 
-    if (data.session) {
-      router.push("/dashboard");
-      return;
-    }
-
-    setSuccessMessage("Account created. Check your email to confirm, then sign in.");
+    router.push("/dashboard");
   }
 
   return (
@@ -117,13 +108,6 @@ export default function RegisterPage() {
               </div>
             )}
 
-            {successMessage && (
-              <div className="flex items-start gap-2 rounded-lg border border-primary/50 bg-primary/10 p-3 text-sm text-primary">
-                <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
-                <p>{successMessage}</p>
-              </div>
-            )}
-
             <form className="space-y-4" onSubmit={handleSubmit} noValidate>
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
@@ -133,7 +117,7 @@ export default function RegisterPage() {
                     type="text"
                     id="name"
                     className="pl-8"
-                    placeholder="Jordan Reed"
+                    placeholder="Enter the full name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     disabled={isSubmitting}
@@ -149,7 +133,7 @@ export default function RegisterPage() {
                     type="email"
                     id="email"
                     className="pl-8"
-                    placeholder="you@transitops.in"
+                    placeholder="Enter the email address"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
@@ -184,7 +168,7 @@ export default function RegisterPage() {
                     type={showPassword ? "text" : "password"}
                     id="password"
                     className="px-8"
-                    placeholder="••••••••"
+                    placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting}
