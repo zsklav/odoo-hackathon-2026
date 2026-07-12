@@ -51,7 +51,7 @@ npm run dev
 # open http://localhost:3000
 ```
 
-## 🚨 Team commit rules (read before you push)
+## Team commit rules (read before you push)
 
 Individual commits are **scored per member** — protect your contribution:
 
@@ -75,5 +75,5 @@ git log --pretty="%an <%ae> — %s"
 ## Team
 
 - **Team Lead:** Valkyriezz (`zsklav`)
-- FlashL3opard
+- FlashL3opard (`Yash Sheorey`)
 - Mystic Owl (`Siddharth-732`)
