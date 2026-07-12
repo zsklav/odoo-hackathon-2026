@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
-import { createMaintenanceLog } from "@/app/actions/maintenance";
 
 type Vehicle = {
   id: string;
@@ -10,6 +10,7 @@ type Vehicle = {
 };
 
 export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -23,18 +24,17 @@ export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
     const vehicleId = formData.get("vehicleId") as string;
     const description = formData.get("description") as string;
     const cost = parseFloat(formData.get("cost") as string);
-    const openedAt = formData.get("openedAt") as string;
-
     if (!vehicleId || !description || isNaN(cost)) {
       setError("Please fill out all fields correctly.");
       setIsSubmitting(false);
       return;
     }
 
-    const result = await createMaintenanceLog({ vehicleId, description, cost, openedAt });
-
-    if (result.success) {
+    const response = await fetch("/api/maintenance", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ vehicleId, description, cost }) });
+    const result = await response.json();
+    if (response.ok) {
       setIsOpen(false);
+      router.refresh();
     } else {
       setError(result.error || "An error occurred.");
     }

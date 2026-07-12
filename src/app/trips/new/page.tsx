@@ -35,15 +35,15 @@ export default function NewTripPage() {
     let cancelled = false;
     async function run() {
       const [vRes, dRes] = await Promise.all([
-        fetch("/api/vehicles"),
-        fetch("/api/drivers"),
+        fetch("/api/vehicles?status=AVAILABLE"),
+        fetch("/api/drivers?status=AVAILABLE"),
       ]);
       if (cancelled) return;
       const v: Vehicle[] = vRes.ok ? await vRes.json() : [];
       const d: Driver[] = dRes.ok ? await dRes.json() : [];
       if (cancelled) return;
       setVehicles(v);
-      setDrivers(d);
+      setDrivers(d.filter((driver) => new Date(driver.licenseExpiryDate).getTime() >= Date.now()));
     }
     run();
     return () => {
