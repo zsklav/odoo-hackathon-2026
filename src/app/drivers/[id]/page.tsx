@@ -195,8 +195,8 @@ export default function DriverDetailPage() {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-2 px-4 py-16 text-center">
         <p className="text-sm font-medium">Driver not found</p>
-        <Link href="/drivers" className="text-sm text-primary hover:underline">
-          Back to Driver Management
+        <Link href="/dashboard?role=DRIVER&tab=driver-registry" className="text-sm text-primary hover:underline">
+          Back to Dashboard
         </Link>
       </div>
     );
@@ -207,11 +207,11 @@ export default function DriverDetailPage() {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <Link
-        href="/drivers"
+        href="/dashboard?role=DRIVER&tab=driver-registry"
         className="flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Back to Driver Management
+        Back to Dashboard
       </Link>
 
       <Card>
