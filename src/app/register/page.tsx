@@ -146,7 +146,7 @@ export default function RegisterPage() {
                       type="text"
                       id="name"
                       className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
-                      placeholder="Jordan Reed"
+                      placeholder="Enter your full name"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       disabled={isSubmitting}
@@ -162,7 +162,7 @@ export default function RegisterPage() {
                       type="email"
                       id="email"
                       className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
-                      placeholder="you@transitops.in"
+                      placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       disabled={isSubmitting}
@@ -198,7 +198,7 @@ export default function RegisterPage() {
                       type={showPassword ? "text" : "password"}
                       id="password"
                       className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] px-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
-                      placeholder="••••••••"
+                      placeholder="Create a password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={isSubmitting}
