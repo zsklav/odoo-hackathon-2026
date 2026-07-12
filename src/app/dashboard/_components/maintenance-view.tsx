@@ -128,7 +128,7 @@ export async function MaintenanceView() {
           </h3>
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-medium text-slate-900 dark:text-slate-200">
-              ${(mtdCost / 1000).toFixed(1)}k
+              ₹{(mtdCost / 1000).toFixed(1)}k
             </span>
             <span className="text-xs font-medium text-orange-500 dark:text-[#f58f29]">
               Budgeted
@@ -208,7 +208,7 @@ export async function MaintenanceView() {
                         )}
                       </td>
                       <td className="px-6 py-4 font-medium text-slate-900 dark:text-slate-200">
-                        ${log.cost.toFixed(2)}
+                        ₹{log.cost.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-right">
                         <MaintenanceCloseButton id={log.id} closed={log.status === "CLOSED"} />

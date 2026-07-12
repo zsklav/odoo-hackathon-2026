@@ -36,7 +36,7 @@ export function ReportsCharts({
           <p className="mb-1 font-semibold text-white">{label || payload[0].name}</p>
           {payload.map((p: any, i: number) => (
             <p key={i} className="text-sm font-medium" style={{ color: p.color || p.fill }}>
-              {p.name === "cost" ? `$${p.value.toFixed(2)}` : p.value}
+              {p.name === "cost" ? `₹${p.value.toFixed(2)}` : p.value}
             </p>
           ))}
         </div>
@@ -92,7 +92,7 @@ export function ReportsCharts({
             <BarChart data={maintenanceCostData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis dataKey="month" stroke="#94a3b8" axisLine={false} tickLine={false} />
-              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `$${value}`} />
+              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value}`} />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="cost" fill="#f58f29" radius={[4, 4, 0, 0]} name="Cost" />
             </BarChart>

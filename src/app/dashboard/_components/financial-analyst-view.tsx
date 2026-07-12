@@ -119,7 +119,7 @@ export async function FinancialAnalystView({
           <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">Total MTD Cost</h3>
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-bold text-slate-900 dark:text-slate-200">
-              ${totalOperationalCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ₹{totalOperationalCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -128,7 +128,7 @@ export async function FinancialAnalystView({
           <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">MTD Fuel</h3>
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-bold text-slate-900 dark:text-slate-200">
-              ${totalFuelCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ₹{totalFuelCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -137,7 +137,7 @@ export async function FinancialAnalystView({
           <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">MTD Maintenance</h3>
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-bold text-slate-900 dark:text-slate-200">
-              ${totalMaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ₹{totalMaintenanceCost.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -146,7 +146,7 @@ export async function FinancialAnalystView({
           <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400 mb-3">MTD Other Expenses</h3>
           <div className="flex items-baseline gap-3">
             <span className="text-2xl font-bold text-slate-900 dark:text-slate-200">
-              ${totalOtherExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              ₹{totalOtherExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
         </div>
@@ -233,7 +233,7 @@ export async function FinancialAnalystView({
                         </span>
                       </td>
                       <td className="px-5 py-4 font-bold text-right text-[#f58f29]">
-                        ${activity.cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        ₹{activity.cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
                     </tr>
                   ))
