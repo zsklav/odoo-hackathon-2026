@@ -13,6 +13,7 @@ import { NotificationMenu } from "./notification-menu";
 import { MaintenanceView } from "./maintenance-view";
 import { VehicleRegistryView } from "./vehicle-registry-view";
 import { ReportsView } from "./fleet-reports-view";
+import { VehicleCsvImport } from "./vehicle-csv-import";
 import {
   Search,
   Bell,
@@ -272,6 +273,7 @@ export async function FleetManagerView({
                 Active Deployments
               </h2>
               <div className="flex items-center gap-3">
+                <VehicleCsvImport />
                 <button className="flex items-center gap-2 rounded-md bg-slate-100 dark:bg-slate-700/50 px-4 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 transition-colors hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white">
                   <Download className="h-4 w-4" />
                   Export CSV
