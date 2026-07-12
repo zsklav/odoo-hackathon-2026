@@ -12,8 +12,38 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
+import { prisma } from "@/lib/prisma";
+import { TripStatus } from "@/generated/prisma/client";
 
 export async function FuelExpensesView() {
+  const fuelLogs = await prisma.fuelLog.findMany({
+    include: { vehicle: true },
+    orderBy: { date: "desc" },
+    take: 5,
+  });
+
+  const expenses = await prisma.expense.findMany({
+    include: { vehicle: true },
+    orderBy: { date: "desc" },
+    take: 5,
+  });
+
+  const allFuelLogs = await prisma.fuelLog.findMany();
+  const totalFuelCost = allFuelLogs.reduce((sum, log) => sum + log.cost, 0);
+
+  const allExpenses = await prisma.expense.findMany();
+  const totalExpenseCost = allExpenses.reduce((sum, exp) => sum + exp.cost, 0);
+
+  const totalMaintenanceOverhead = allExpenses
+    .filter((e) => e.type === "MAINTENANCE")
+    .reduce((sum, e) => sum + e.cost, 0);
+
+  const activeDispatches = await prisma.trip.count({
+    where: { status: TripStatus.DISPATCHED },
+  });
+
+  const totalOperationalCost = totalFuelCost + totalExpenseCost;
+
   return (
     <div className="w-full text-slate-900 dark:text-slate-200">
       {/* Top Navigation Bar */}
@@ -88,48 +118,32 @@ export async function FuelExpensesView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300">
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
-                    VAN-05
-                  </td>
-                  <td className="px-5 py-4 text-xs font-medium">05 Jul 2026</td>
-                  <td className="px-5 py-4 text-xs">42 L</td>
-                  <td className="px-5 py-4 font-bold text-right">3,150</td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
-                    TRK-22
-                  </td>
-                  <td className="px-5 py-4 text-xs font-medium">05 Jul 2026</td>
-                  <td className="px-5 py-4 text-xs">180 L</td>
-                  <td className="px-5 py-4 font-bold text-right">13,500</td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
-                    VAN-08
-                  </td>
-                  <td className="px-5 py-4 text-xs font-medium">04 Jul 2026</td>
-                  <td className="px-5 py-4 text-xs">38 L</td>
-                  <td className="px-5 py-4 font-bold text-right">2,850</td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
-                    TRK-14
-                  </td>
-                  <td className="px-5 py-4 text-xs font-medium">04 Jul 2026</td>
-                  <td className="px-5 py-4 text-xs">210 L</td>
-                  <td className="px-5 py-4 font-bold text-[#f58f29] text-right">
-                    15,750
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
-                    VAN-05
-                  </td>
-                  <td className="px-5 py-4 text-xs font-medium">02 Jul 2026</td>
-                  <td className="px-5 py-4 text-xs">45 L</td>
-                  <td className="px-5 py-4 font-bold text-right">3,375</td>
-                </tr>
+                {fuelLogs.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-5 py-4 text-center text-sm text-slate-500">
+                      No recent fuel logs.
+                    </td>
+                  </tr>
+                ) : (
+                  fuelLogs.map((log) => (
+                    <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                      <td className="px-5 py-4 font-mono font-medium text-[#f58f29]">
+                        {log.vehicle.registrationNumber}
+                      </td>
+                      <td className="px-5 py-4 text-xs font-medium">
+                        {log.date.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="px-5 py-4 text-xs">{log.liters.toFixed(1)} L</td>
+                      <td className="px-5 py-4 font-bold text-right">
+                        {log.cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -145,138 +159,51 @@ export async function FuelExpensesView() {
                 (Toll / Misc)
               </span>
             </div>
-            <div className="flex gap-2">
-              <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border border-emerald-200 dark:border-emerald-900/50">
-                Available
-              </span>
-              <span className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider border border-slate-200 dark:border-slate-700">
-                Completed
-              </span>
-            </div>
+            <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              Recent Entries
+            </span>
           </div>
           <div className="overflow-x-auto flex-1">
             <table className="w-full text-left text-sm whitespace-nowrap">
               <thead className="border-b border-slate-200 dark:border-slate-700/50 text-xs font-bold text-slate-500 dark:text-slate-400">
                 <tr>
-                  <th className="px-5 py-4">Trip</th>
                   <th className="px-5 py-4">Vehicle</th>
-                  <th className="px-5 py-4">Status</th>
-                  <th className="px-5 py-4 text-right">Toll</th>
-                  <th className="px-5 py-4 text-right">Other</th>
-                  <th className="px-5 py-4 text-right">Maint.</th>
-                  <th className="px-5 py-4 text-right">Total</th>
+                  <th className="px-5 py-4">Date</th>
+                  <th className="px-5 py-4">Type</th>
+                  <th className="px-5 py-4 text-right">Cost</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300">
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
-                    TR001
-                  </td>
-                  <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                    VAN-05
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider border border-slate-200 dark:border-slate-700">
-                      Completed
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs">120</td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 font-bold text-right text-slate-900 dark:text-slate-200">
-                    120
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
-                    TR014
-                  </td>
-                  <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                    TRK-22
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border border-emerald-200 dark:border-emerald-900/50">
-                      Available
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs">450</td>
-                  <td className="px-5 py-4 text-right text-xs">75</td>
-                  <td className="px-5 py-4 text-right text-xs">1,200</td>
-                  <td className="px-5 py-4 font-bold text-right text-[#f58f29]">
-                    1,725
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
-                    TR055
-                  </td>
-                  <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                    VAN-08
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider border border-slate-200 dark:border-slate-700">
-                      Completed
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs">85</td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 font-bold text-right text-slate-900 dark:text-slate-200">
-                    85
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
-                    TR102
-                  </td>
-                  <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                    TRK-14
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border border-emerald-200 dark:border-emerald-900/50">
-                      Available
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs">620</td>
-                  <td className="px-5 py-4 text-right text-xs">210</td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 font-bold text-right text-[#f58f29]">
-                    830
-                  </td>
-                </tr>
-                <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
-                  <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
-                    TR119
-                  </td>
-                  <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
-                    VAN-05
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-950/30 px-2 py-0.5 text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider border border-emerald-200 dark:border-emerald-900/50">
-                      Available
-                    </span>
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs">120</td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 text-right text-xs italic opacity-50">
-                    0
-                  </td>
-                  <td className="px-5 py-4 font-bold text-right text-slate-900 dark:text-slate-200">
-                    120
-                  </td>
-                </tr>
+                {expenses.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-5 py-4 text-center text-sm text-slate-500">
+                      No recent expenses.
+                    </td>
+                  </tr>
+                ) : (
+                  expenses.map((expense) => (
+                    <tr key={expense.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                      <td className="px-5 py-4 font-mono font-medium text-slate-900 dark:text-slate-200">
+                        {expense.vehicle.registrationNumber}
+                      </td>
+                      <td className="px-5 py-4 font-mono text-slate-500 dark:text-slate-400">
+                        {expense.date.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        })}
+                      </td>
+                      <td className="px-5 py-4">
+                        <span className="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[9px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider border border-slate-200 dark:border-slate-700">
+                          {expense.type}
+                        </span>
+                      </td>
+                      <td className="px-5 py-4 font-bold text-right text-[#f58f29]">
+                        {expense.cost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -307,10 +234,10 @@ export async function FuelExpensesView() {
           </p>
           <div className="flex items-end justify-between">
             <span className="text-3xl font-bold text-slate-900 dark:text-white">
-              8,450.00
+              {totalMaintenanceOverhead.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
             <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
-              Stable
+              Active
             </span>
           </div>
         </div>
@@ -320,13 +247,13 @@ export async function FuelExpensesView() {
           </p>
           <div className="flex items-end justify-between">
             <span className="text-3xl font-bold text-slate-900 dark:text-white">
-              42{" "}
+              {activeDispatches}{" "}
               <span className="text-xl text-slate-500 dark:text-slate-400">
                 Units
               </span>
             </span>
             <span className="text-xs font-semibold text-[#f58f29] flex items-center mb-1">
-              <Zap className="h-3 w-3 mr-1" /> Peak
+              <Zap className="h-3 w-3 mr-1" /> Live
             </span>
           </div>
         </div>
@@ -339,7 +266,7 @@ export async function FuelExpensesView() {
             Auto-Calculated Metric
           </p>
           <h2 className="text-sm font-bold tracking-wide">
-            TOTAL OPERATIONAL COST (AUTO) = FUEL + MAINT
+            TOTAL OPERATIONAL COST (AUTO) = FUEL + EXPENSES
           </h2>
         </div>
         <div className="flex items-center gap-6">
@@ -352,7 +279,7 @@ export async function FuelExpensesView() {
               Currency: INR
             </p>
             <span className="text-4xl font-black text-[#f58f29] tracking-tight">
-              34,070.00
+              {totalOperationalCost.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
           <button className="ml-4 rounded-md border border-[#f58f29] px-6 py-3 text-xs font-bold text-[#f58f29] uppercase tracking-wider transition-colors hover:bg-[#f58f29] hover:text-orange-950">
@@ -365,5 +292,3 @@ export async function FuelExpensesView() {
     </div>
   );
 }
-
-// Need to import TrendingUp in fuel-expenses-view.tsx if not imported.

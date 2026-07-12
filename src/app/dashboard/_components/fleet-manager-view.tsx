@@ -10,6 +10,7 @@ import { VehiclePill } from "./vehicle-pill";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { MaintenanceView } from "./maintenance-view";
+import { VehicleRegistryView } from "./vehicle-registry-view";
 import {
   Search,
   Bell,
@@ -48,6 +49,10 @@ export async function FleetManagerView({
 
   if (tab === "maintenance") {
     return <MaintenanceView />;
+  }
+  
+  if (tab === "vehicle-registry") {
+    return <VehicleRegistryView />;
   }
 
   if (tab !== "dashboard") {
