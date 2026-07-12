@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { VehicleStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { requireRole } from "@/lib/auth/roles";
 
 async function requireSession() {
   const cookieStore = await cookies();
@@ -37,10 +38,7 @@ export async function PATCH(
   request: Request,
   ctx: RouteContext<"/api/vehicles/[id]">
 ) {
-  const user = await requireSession();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const { response } = await requireRole(["FLEET_MANAGER"]); if (response) return response;
 
   const { id } = await ctx.params;
   const existing = await prisma.vehicle.findUnique({ where: { id } });
@@ -146,10 +144,7 @@ export async function DELETE(
   _request: Request,
   ctx: RouteContext<"/api/vehicles/[id]">
 ) {
-  const user = await requireSession();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const { response } = await requireRole(["FLEET_MANAGER"]); if (response) return response;
 
   const { id } = await ctx.params;
   const existing = await prisma.vehicle.findUnique({ where: { id } });

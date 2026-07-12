@@ -5,6 +5,7 @@ import { VehicleStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
 import { createOrganizationNotification } from "@/lib/notifications";
+import { requireRole } from "@/lib/auth/roles";
 
 async function requireSession() {
   const cookieStore = await cookies();
@@ -43,10 +44,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = await requireSession();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const { user, response } = await requireRole(["FLEET_MANAGER"]); if (response) return response;
 
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== "object") {
