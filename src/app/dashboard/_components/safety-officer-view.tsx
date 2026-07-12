@@ -3,6 +3,7 @@ import { LayoutGrid, Shield, BarChart3, Settings, HelpCircle } from "lucide-reac
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
+import { ReportsView } from "./fleet-reports-view";
 
 export const SAFETY_OFFICER_LINKS = [
   { label: "Dashboard", icon: LayoutGrid },
@@ -10,7 +11,18 @@ export const SAFETY_OFFICER_LINKS = [
   { label: "Reports", icon: BarChart3 },
 ];
 
-export function SafetyOfficerView() {
+export async function SafetyOfficerView({
+  searchParams,
+}: {
+  searchParams?: Promise<{ tab?: string }>;
+}) {
+  const sp = searchParams ? await searchParams : {};
+  const tab = sp.tab || "dashboard";
+
+  if (tab === "reports") {
+    return <ReportsView />;
+  }
+
   return (
     <>
       <div className="mb-6 flex items-start justify-between gap-4">

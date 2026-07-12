@@ -119,7 +119,7 @@ export default async function DashboardPage({
         {role === "FLEET_MANAGER" && (
           <FleetManagerView searchParams={searchParams} />
         )}
-        {role === "SAFETY_OFFICER" && <SafetyOfficerView />}
+        {role === "SAFETY_OFFICER" && <SafetyOfficerView searchParams={searchParams} />}
         {role === "FINANCIAL_ANALYST" && (
           <FinancialAnalystView searchParams={searchParams} />
         )}

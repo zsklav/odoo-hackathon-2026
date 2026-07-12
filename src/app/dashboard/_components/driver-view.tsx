@@ -3,6 +3,7 @@ import { LayoutGrid, Users, Map, BarChart3 } from "lucide-react";
 import { TripManagementView } from "./trip-management-view";
 import { DriverRegistryView } from "./driver-registry-view";
 import { DriverDashboardView } from "./driver-dashboard-view";
+import { ReportsView } from "./fleet-reports-view";
 
 export const DRIVER_LINKS = [
   { label: "Dashboard", icon: LayoutGrid },
@@ -31,6 +32,10 @@ export async function DriverView({
 
   if (tab === "dashboard") {
     return <DriverDashboardView />;
+  }
+
+  if (tab === "reports") {
+    return <ReportsView />;
   }
 
   return (
