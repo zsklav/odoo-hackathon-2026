@@ -1,4 +1,12 @@
 import Link from 'next/link'
+import { LayoutGrid, Users, Map, BarChart3 } from "lucide-react";
+
+export const DRIVER_LINKS = [
+  { label: "Dashboard", icon: LayoutGrid },
+  { label: "Driver Registry", icon: Users },
+  { label: "Trip Management", icon: Map },
+  { label: "Reports", icon: BarChart3 },
+];
 
 export function DriverView() {
   return (

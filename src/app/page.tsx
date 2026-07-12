@@ -1,18 +1,52 @@
+import { ThemeToggle } from "@/components/theme-toggle";
+
 const modules = [
-  { title: "Vehicle Registry", desc: "Fleet master list · unique reg no · status lifecycle", icon: "🚛" },
-  { title: "Driver Management", desc: "Profiles · license validity · safety score · status", icon: "🧑‍✈️" },
-  { title: "Trip Dispatch", desc: "Assign vehicle + driver · rule checks · Draft→Dispatched→Completed", icon: "🗺️" },
-  { title: "Maintenance", desc: "Service logs · auto 'In Shop' · hidden from dispatch", icon: "🔧" },
-  { title: "Fuel & Expenses", desc: "Fuel logs · tolls · auto operational cost per vehicle", icon: "⛽" },
-  { title: "Reports & Analytics", desc: "Fuel efficiency · fleet utilization · ROI · CSV export", icon: "📊" },
+  {
+    title: "Vehicle Registry",
+    desc: "Fleet master list · unique reg no · status lifecycle",
+    icon: "🚛",
+  },
+  {
+    title: "Driver Management",
+    desc: "Profiles · license validity · safety score · status",
+    icon: "🧑‍✈️",
+  },
+  {
+    title: "Trip Dispatch",
+    desc: "Assign vehicle + driver · rule checks · Draft→Dispatched→Completed",
+    icon: "🗺️",
+  },
+  {
+    title: "Maintenance",
+    desc: "Service logs · auto 'In Shop' · hidden from dispatch",
+    icon: "🔧",
+  },
+  {
+    title: "Fuel & Expenses",
+    desc: "Fuel logs · tolls · auto operational cost per vehicle",
+    icon: "⛽",
+  },
+  {
+    title: "Reports & Analytics",
+    desc: "Fuel efficiency · fleet utilization · ROI · CSV export",
+    icon: "📊",
+  },
 ];
 
-const roles = ["Fleet Manager", "Driver", "Safety Officer", "Financial Analyst"];
+const roles = [
+  "Fleet Manager",
+  "Driver",
+  "Safety Officer",
+  "Financial Analyst",
+];
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col items-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="w-full max-w-5xl px-6 py-16 sm:py-24">
+      <main className="relative w-full max-w-5xl px-6 py-16 sm:py-24">
+        <div className="absolute right-6 top-16 sm:right-8">
+          <ThemeToggle />
+        </div>
         <span className="inline-block rounded-full border border-black/10 px-3 py-1 text-xs font-medium text-zinc-600 dark:border-white/15 dark:text-zinc-400">
           Odoo Hackathon 2026 · Virtual Round
         </span>
