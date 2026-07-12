@@ -10,6 +10,7 @@ export const dynamic = "force-dynamic";
 
 type Search = {
   role?: string;
+  tab?: string;
   type?: string;
   status?: string;
   region?: string;
@@ -29,6 +30,7 @@ export default async function DashboardPage({
 }) {
   const sp = await searchParams;
   const role = sp.role || "FLEET_MANAGER";
+  const activeTab = sp.tab || "dashboard";
 
   const formatRoleName = (r: string) => r.split('_').map(w => w.charAt(0) + w.slice(1).toLowerCase()).join(' ');
   const formatInitials = (r: string) => r.split('_').map(w => w[0]).join('');
@@ -54,11 +56,12 @@ export default async function DashboardPage({
           <nav className="px-4 space-y-1">
             {currentLinks.map((link, idx) => {
               const Icon = link.icon;
-              const isActive = link.label === "Dashboard";
+              const tabId = link.label.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
+              const isActive = tabId === activeTab;
               
               if (isActive) {
                 return (
-                  <Link key={idx} href="#" className="flex items-center gap-3 rounded-lg bg-slate-100 dark:bg-slate-700/40 px-3 py-2.5 text-sm font-medium text-slate-900 dark:text-white transition-colors">
+                  <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-lg bg-slate-100 dark:bg-slate-700/40 px-3 py-2.5 text-sm font-medium text-slate-900 dark:text-white transition-colors">
                     <Icon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                     {link.label}
                   </Link>
@@ -66,7 +69,7 @@ export default async function DashboardPage({
               }
 
               return (
-                <Link key={idx} href="#" className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white">
+                <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white">
                   <Icon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
                   {link.label}
                 </Link>

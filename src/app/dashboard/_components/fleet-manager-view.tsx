@@ -8,6 +8,7 @@ import {
 import { FilterBar } from "./filter-bar";
 import { VehiclePill } from "./vehicle-pill";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { MaintenanceView } from "./maintenance-view";
 import {
   Search,
   Bell,
@@ -34,14 +35,30 @@ export const FLEET_MANAGER_LINKS = [
 
 const VALID_STATUS = new Set<string>(Object.values(VehicleStatus));
 
-type Search = { type?: string; status?: string; region?: string };
+type SearchType = { tab?: string; type?: string; status?: string; region?: string };
 
 export async function FleetManagerView({
   searchParams,
 }: {
-  searchParams: Promise<Search>;
+  searchParams: Promise<SearchType>;
 }) {
   const sp = await searchParams;
+  const tab = sp.tab || "dashboard";
+
+  if (tab === "maintenance") {
+    return <MaintenanceView />;
+  }
+
+  if (tab !== "dashboard") {
+    return (
+      <div className="flex h-full items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
+        <div className="text-center">
+          <h2 className="text-lg font-medium text-slate-900 dark:text-white capitalize">{tab.replace('-', ' ')}</h2>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">This module is under construction.</p>
+        </div>
+      </div>
+    );
+  }
 
   const vehicleWhere = {
     ...(sp.type ? { type: sp.type } : {}),
