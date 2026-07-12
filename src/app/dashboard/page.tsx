@@ -109,7 +109,7 @@ export default async function DashboardPage({
         {role === "FINANCIAL_ANALYST" && (
           <FinancialAnalystView searchParams={searchParams} />
         )}
-        {role === "DRIVER" && <DriverView />}
+        {role === "DRIVER" && <DriverView searchParams={searchParams} />}
       </main>
     </div>
   );
