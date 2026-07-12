@@ -202,8 +202,8 @@ export default function VehicleDetailPage() {
     return (
       <div className="mx-auto flex w-full max-w-2xl flex-col items-center gap-2 px-4 py-16 text-center">
         <p className="text-sm font-medium">Vehicle not found</p>
-        <Link href="/vehicles" className="text-sm text-primary hover:underline">
-          Back to Vehicle Registry
+        <Link href="/dashboard?role=FLEET_MANAGER&tab=vehicle-registry" className="text-sm text-primary hover:underline">
+          Back to Dashboard
         </Link>
       </div>
     );
@@ -212,11 +212,11 @@ export default function VehicleDetailPage() {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
       <Link
-        href="/vehicles"
+        href="/dashboard?role=FLEET_MANAGER&tab=vehicle-registry"
         className="flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Back to Vehicle Registry
+        Back to Dashboard
       </Link>
 
       <Card>
