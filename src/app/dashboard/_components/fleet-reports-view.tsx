@@ -17,28 +17,35 @@ export async function ReportsView() {
     value,
   }));
 
-  // 2. Maintenance Cost by Month
+  // 2. Maintenance Cost by Month (Last 6 Months)
   const maintenanceLogs = await prisma.maintenanceLog.findMany({
-    where: { status: "CLOSED" },
-    select: { closedAt: true, cost: true },
-    orderBy: { closedAt: "asc" },
+    select: { openedAt: true, cost: true },
   });
 
-  const costByMonth: Record<string, number> = {};
+  const last6Months: Record<string, number> = {};
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    const monthStr = d.toLocaleString("default", { month: "short", year: "2-digit" });
+    last6Months[monthStr] = 0;
+  }
+
   maintenanceLogs.forEach((log) => {
-    if (log.closedAt) {
-      const month = log.closedAt.toLocaleString("default", {
+    if (log.openedAt) {
+      const monthStr = log.openedAt.toLocaleString("default", {
         month: "short",
         year: "2-digit",
       });
-      costByMonth[month] = (costByMonth[month] || 0) + log.cost;
+      if (last6Months[monthStr] !== undefined) {
+        last6Months[monthStr] += log.cost;
+      }
     }
   });
   
-  // Convert to array and ensure we only take the last 6 months if there are many
-  const maintenanceCostData = Object.entries(costByMonth)
-    .map(([month, cost]) => ({ month, cost }))
-    .slice(-6);
+  const maintenanceCostData = Object.entries(last6Months).map(([month, cost]) => ({
+    month,
+    cost,
+  }));
 
   // 3. Driver Safety Scores
   const drivers = await prisma.driver.findMany({

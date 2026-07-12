@@ -23,6 +23,7 @@ export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
     const vehicleId = formData.get("vehicleId") as string;
     const description = formData.get("description") as string;
     const cost = parseFloat(formData.get("cost") as string);
+    const openedAt = formData.get("openedAt") as string;
 
     if (!vehicleId || !description || isNaN(cost)) {
       setError("Please fill out all fields correctly.");
@@ -30,7 +31,7 @@ export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
       return;
     }
 
-    const result = await createMaintenanceLog({ vehicleId, description, cost });
+    const result = await createMaintenanceLog({ vehicleId, description, cost, openedAt });
 
     if (result.success) {
       setIsOpen(false);
@@ -80,6 +81,18 @@ export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              <div>
+                <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  name="openedAt"
+                  className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-orange-500 focus:outline-none dark:border-slate-600 dark:bg-slate-800 dark:text-white"
+                  defaultValue={new Date().toISOString().split('T')[0]}
+                />
               </div>
 
               <div>

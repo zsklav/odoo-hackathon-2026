@@ -7,6 +7,7 @@ export async function createMaintenanceLog(data: {
   vehicleId: string;
   description: string;
   cost: number;
+  openedAt?: string;
 }) {
   try {
     await prisma.maintenanceLog.create({
@@ -15,6 +16,7 @@ export async function createMaintenanceLog(data: {
         description: data.description,
         cost: data.cost,
         status: "OPEN",
+        ...(data.openedAt && { openedAt: new Date(data.openedAt) }),
       },
     });
 
