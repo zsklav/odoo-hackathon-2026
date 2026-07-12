@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { MaintenanceView } from "./maintenance-view";
 import { VehicleRegistryView } from "./vehicle-registry-view";
+import { ReportsView } from "./fleet-reports-view";
 import {
   Search,
   Bell,
@@ -53,6 +54,10 @@ export async function FleetManagerView({
   
   if (tab === "vehicle-registry") {
     return <VehicleRegistryView />;
+  }
+
+  if (tab === "reports") {
+    return <ReportsView />;
   }
 
   if (tab !== "dashboard") {
