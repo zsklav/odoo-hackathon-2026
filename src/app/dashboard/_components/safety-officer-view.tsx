@@ -1,4 +1,11 @@
 import Link from 'next/link'
+import { LayoutGrid, Shield, BarChart3 } from "lucide-react";
+
+export const SAFETY_OFFICER_LINKS = [
+  { label: "Dashboard", icon: LayoutGrid },
+  { label: "License", icon: Shield },
+  { label: "Reports", icon: BarChart3 },
+];
 
 export function SafetyOfficerView() {
   return (
