@@ -84,7 +84,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push("/dashboard");
+    router.push(`/dashboard?role=${encodeURIComponent(result.role)}&tab=dashboard`);
   }
 
   return (

@@ -19,7 +19,9 @@ export default function proxy(req: NextRequest) {
   }
 
   if (isAuthRoute && session) {
-    return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
+    return NextResponse.redirect(
+      new URL(`/dashboard?role=${encodeURIComponent(session.role)}&tab=dashboard`, req.nextUrl)
+    );
   }
 
   return NextResponse.next();

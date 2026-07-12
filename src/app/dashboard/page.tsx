@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { FleetManagerView, FLEET_MANAGER_LINKS } from "./_components/fleet-manager-view";
 import { SafetyOfficerView, SAFETY_OFFICER_LINKS } from "./_components/safety-officer-view";
 import { FinancialAnalystView, FINANCIAL_ANALYST_LINKS } from "./_components/financial-analyst-view";
 import { DriverView, DRIVER_LINKS } from "./_components/driver-view";
 import Link from "next/link";
+import { verifySessionToken } from "@/lib/auth/jwt";
 
 export const metadata: Metadata = { title: "Dashboard · TransitOps" };
 export const dynamic = "force-dynamic";
@@ -29,8 +32,19 @@ export default async function DashboardPage({
   searchParams: Promise<Search>;
 }) {
   const sp = await searchParams;
-  const role = sp.role || "FLEET_MANAGER";
   const activeTab = sp.tab || "dashboard";
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+  const session = token ? verifySessionToken(token) : null;
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  const role = session.role;
+  if (sp.role !== role) {
+    redirect(`/dashboard?role=${encodeURIComponent(role)}&tab=${encodeURIComponent(activeTab)}`);
+  }
 
   const formatRoleName = (r: string) => r.split('_').map(w => w.charAt(0) + w.slice(1).toLowerCase()).join(' ');
   const formatInitials = (r: string) => r.split('_').map(w => w[0]).join('');

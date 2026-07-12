@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  const { email, password } = body as Record<string, unknown>;
+  const { email, password, role } = body as Record<string, unknown>;
 
   if (typeof email !== "string" || typeof password !== "string") {
     return NextResponse.json({ error: INVALID_CREDENTIALS_MESSAGE }, { status: 401 });
@@ -21,6 +21,10 @@ export async function POST(request: Request) {
   const user = await prisma.user.findUnique({ where: { email } });
   if (!user) {
     return NextResponse.json({ error: INVALID_CREDENTIALS_MESSAGE }, { status: 401 });
+  }
+
+  if (typeof role === "string" && role !== user.role) {
+    return NextResponse.json({ error: "This account is not assigned to the selected role." }, { status: 403 });
   }
 
   const passwordMatches = await verifyPassword(password, user.passwordHash);

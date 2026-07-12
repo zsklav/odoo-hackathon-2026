@@ -70,16 +70,17 @@ export default function LoginPage() {
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, role }),
     });
+    const result = await response.json().catch(() => null);
     setIsSubmitting(false);
 
     if (!response.ok) {
-      setErrorMessage("Invalid email or password.");
+      setErrorMessage(result?.error ?? "Invalid email or password.");
       return;
     }
 
-    router.push("/dashboard");
+    router.push(`/dashboard?role=${encodeURIComponent(result.role)}&tab=dashboard`);
   }
 
   return (
