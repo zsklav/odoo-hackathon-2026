@@ -110,7 +110,7 @@ export function LogMaintenanceButton({ vehicles }: { vehicles: Vehicle[] }) {
 
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
-                  Estimated Cost ($)
+                  Estimated Cost (₹)
                 </label>
                 <input
                   type="number"

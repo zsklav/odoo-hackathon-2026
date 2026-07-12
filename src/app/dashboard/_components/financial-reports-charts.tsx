@@ -37,7 +37,7 @@ export function FinancialReportsCharts({
           {payload.map((p: any, i: number) => (
             <div key={i} className="flex items-center justify-between gap-4 text-sm font-medium" style={{ color: p.color || p.fill }}>
               <span className="capitalize">{p.name}</span>
-              <span>${Number(p.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span>₹{Number(p.value).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
           ))}
         </div>
@@ -93,7 +93,7 @@ export function FinancialReportsCharts({
             <BarChart data={vehicleCostData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis dataKey="name" stroke="#94a3b8" axisLine={false} tickLine={false} />
-              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `$${value}`} width={80} />
+              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value}`} width={80} />
               <Tooltip content={<CustomTooltip />} />
               <Bar dataKey="cost" fill="#ef4444" radius={[4, 4, 0, 0]} name="Total Cost" />
             </BarChart>
@@ -111,7 +111,7 @@ export function FinancialReportsCharts({
             <LineChart data={financialTrendData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
               <XAxis dataKey="month" stroke="#94a3b8" axisLine={false} tickLine={false} />
-              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `$${value}`} width={80} />
+              <YAxis stroke="#94a3b8" axisLine={false} tickLine={false} tickFormatter={(value) => `₹${value}`} width={80} />
               <Tooltip content={<CustomTooltip />} />
               <Legend wrapperStyle={{ paddingTop: "20px" }} />
               <Line
