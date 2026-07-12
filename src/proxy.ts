@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifySessionToken } from "@/lib/auth/jwt";
 
-const PROTECTED_ROUTES = ["/dashboard", "/settings", "/profile"];
+const PROTECTED_ROUTES = ["/dashboard", "/settings", "/profile", "/vehicles", "/drivers", "/trips", "/fuel-logs", "/expenses", "/maintenance"];
 const AUTH_ROUTES = ["/login", "/register"];
 
 export default function proxy(req: NextRequest) {

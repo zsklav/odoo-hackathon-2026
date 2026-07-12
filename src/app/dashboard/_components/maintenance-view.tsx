@@ -5,6 +5,7 @@ import { NotificationMenu } from "./notification-menu";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { LogMaintenanceButton } from "./log-maintenance-button";
+import { MaintenanceCloseButton } from "./maintenance-close-button";
 
 export async function MaintenanceView() {
   // Fetch data
@@ -210,9 +211,7 @@ export async function MaintenanceView() {
                         ${log.cost.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <button className="text-slate-400 hover:text-orange-500 transition-colors">
-                          <Wrench className="h-4 w-4" />
-                        </button>
+                        <MaintenanceCloseButton id={log.id} closed={log.status === "CLOSED"} />
                       </td>
                     </tr>
                   );

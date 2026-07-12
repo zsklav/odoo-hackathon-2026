@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { Prisma } from "@/generated/prisma/client";
-import { TripStatus } from "@/generated/prisma/enums";
+import { DriverStatus, TripStatus, VehicleStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
 import { createOrganizationNotification } from "@/lib/notifications";
@@ -96,6 +96,15 @@ export async function POST(request: Request) {
   const driver = await prisma.driver.findUnique({ where: { id: driverId } });
   if (!driver) {
     return NextResponse.json({ error: "Selected driver does not exist." }, { status: 400 });
+  }
+  if (vehicle.status !== VehicleStatus.AVAILABLE) {
+    return NextResponse.json({ error: "Selected vehicle is not available for a new trip." }, { status: 400 });
+  }
+  if (driver.status !== DriverStatus.AVAILABLE) {
+    return NextResponse.json({ error: "Selected driver is not available for a new trip." }, { status: 400 });
+  }
+  if (driver.licenseExpiryDate.getTime() < Date.now()) {
+    return NextResponse.json({ error: "Selected driver's license has expired." }, { status: 400 });
   }
 
   // Core business rule: cargo cannot exceed the vehicle's load capacity.
