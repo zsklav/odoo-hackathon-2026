@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
+import { NotificationMenu } from "./notification-menu";
 import { prisma } from "@/lib/prisma";
 import { DriverStatus } from "@/generated/prisma/client";
 import Link from "next/link";
@@ -90,9 +91,7 @@ export async function DriverDashboardView() {
           <div className="text-slate-400 hover:text-slate-200 transition-colors">
             <ThemeToggle />
           </div>
-          <button className="text-slate-400 hover:text-slate-200 transition-colors">
-            <Bell className="h-5 w-5" />
-          </button>
+          <NotificationMenu />
           <button className="text-slate-400 hover:text-slate-200 transition-colors">
             <Settings className="h-5 w-5" />
           </button>

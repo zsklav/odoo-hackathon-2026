@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { LayoutGrid, DollarSign, Fuel, BarChart3, ArrowRight } from "lucide-react";
+import { LayoutGrid, DollarSign, Fuel, BarChart3, ArrowRight, Settings, HelpCircle } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { DashboardUserMenu } from "./dashboard-user-menu";
+import { NotificationMenu } from "./notification-menu";
 import { FuelExpensesView } from "./fuel-expenses-view";
 
 export const FINANCIAL_ANALYST_LINKS = [
@@ -39,19 +42,35 @@ export async function FinancialAnalystView({
 
   return (
     <>
-      <div className="mb-6">
-        <Link
-          href="/"
-          className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
-        >
-          ← TransitOps
-        </Link>
-        <h1 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
-          Financial Dashboard
-        </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          Track fuel costs, expenses, and overall fleet ROI.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <Link
+            href="/"
+            className="text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+          >
+            ← TransitOps
+          </Link>
+          <h1 className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">
+            Financial Dashboard
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Track fuel costs, expenses, and overall fleet ROI.
+          </p>
+        </div>
+
+        <div className="flex shrink-0 items-center gap-5">
+          <div className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+            <ThemeToggle />
+          </div>
+          <NotificationMenu />
+          <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+            <Settings className="h-5 w-5" />
+          </button>
+          <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+            <HelpCircle className="h-5 w-5" />
+          </button>
+          <DashboardUserMenu />
+        </div>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
