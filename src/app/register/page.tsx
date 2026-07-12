@@ -120,38 +120,14 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        <div className="relative flex flex-col items-center justify-center px-4 py-10 sm:px-8 lg:px-12">
+        <div className="relative flex items-center justify-center px-4 py-6 sm:px-8 lg:px-12">
 
           <Card className="auth-glass-card w-full max-w-[470px] rounded-[28px] border-white/[.09] bg-[#111317]/85 shadow-[0_32px_100px_rgba(0,0,0,.42)] backdrop-blur-2xl animate-fade-in-up">
-            <CardContent className="space-y-6 p-6 sm:p-8">
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-orange-300/15 bg-orange-400/[.07] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-200">
-                  <UserPlus className="size-3.5 text-primary" />
-                  Start Here
-                </div>
-                <div>
-                  <h1 className="text-3xl font-semibold tracking-tight text-balance">
-                    Create your TransitOps account
-                  </h1>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Join the fleet operations workspace with a role-based profile and secure access.
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/[.08] bg-white/[.025] p-3.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                    Roles
-                  </p>
-                  <p className="mt-1 text-sm font-medium">RBAC by design</p>
-                </div>
-                <div className="rounded-2xl border border-white/[.08] bg-white/[.025] p-3.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-                    Onboarding
-                  </p>
-                  <p className="mt-1 text-sm font-medium">Fast setup</p>
-                </div>
+            <CardContent className="space-y-4 p-6 sm:p-7">
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight text-balance">
+                  Create account
+                </h1>
               </div>
 
               {errorMessage && (
@@ -161,8 +137,8 @@ export default function RegisterPage() {
                 </div>
               )}
 
-              <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-                <div className="space-y-2">
+              <form className="space-y-3.5" onSubmit={handleSubmit} noValidate>
+                <div className="space-y-1.5">
                   <Label htmlFor="name">Full Name</Label>
                   <div className="relative">
                     <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -178,7 +154,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="email">Email Address</Label>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -194,7 +170,7 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2 rounded-2xl border border-white/[.08] bg-white/[.025] p-4">
+                <div className="space-y-1.5">
                   <Label htmlFor="role">Select Role</Label>
                   <Select value={role} onValueChange={(value) => value && setRole(value)}>
                     <SelectTrigger
@@ -212,12 +188,9 @@ export default function RegisterPage() {
                       ))}
                     </SelectContent>
                   </Select>
-                  <p className="text-xs text-muted-foreground">
-                    Drivers are registered by Fleet Managers directly.
-                  </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -243,7 +216,7 @@ export default function RegisterPage() {
 
                 <Button
                   type="submit"
-                  className="h-12 w-full gap-2 rounded-xl bg-gradient-to-r from-[#ff8a13] to-[#ff6700] font-semibold text-[#19110b] shadow-[0_14px_28px_rgba(255,105,0,.2)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(255,105,0,.28)]"
+                  className="h-11 w-full gap-2 rounded-xl bg-gradient-to-r from-[#ff8a13] to-[#ff6700] font-semibold text-[#19110b] shadow-[0_14px_28px_rgba(255,105,0,.2)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(255,105,0,.28)]"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -259,12 +232,6 @@ export default function RegisterPage() {
                   )}
                 </Button>
               </form>
-
-              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                <div className="h-px flex-1 bg-border" />
-                <span>Already registered?</span>
-                <div className="h-px flex-1 bg-border" />
-              </div>
 
               <p className="text-center text-sm text-muted-foreground">
                 Already have an account?{" "}

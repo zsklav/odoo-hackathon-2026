@@ -5,15 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   AlertCircle,
-  DollarSign,
   Eye,
   EyeOff,
   Lock,
   LogIn,
   Loader2,
   Mail,
-  Route,
-  ShieldCheck,
   Truck,
 } from "lucide-react";
 import { AuthBrandingPanel } from "@/components/auth/auth-branding-panel";
@@ -35,13 +32,6 @@ const roles = [
   { label: "Driver", value: "DRIVER" },
   { label: "Safety Officer", value: "SAFETY_OFFICER" },
   { label: "Financial Analyst", value: "FINANCIAL_ANALYST" },
-];
-
-const accessMapping = [
-  { label: "Fleet Manager", access: "Fleet, Maintenance", icon: Truck },
-  { label: "Dispatcher", access: "Dashboard, Trips", icon: Route },
-  { label: "Safety Officer", access: "Drivers, Compliance", icon: ShieldCheck },
-  { label: "Financial Analyst", access: "Expenses, Analytics", icon: DollarSign },
 ];
 
 const inputFocusClass =
@@ -125,29 +115,14 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="relative flex flex-col items-center justify-center px-4 py-10 sm:px-8 lg:px-12">
+        <div className="relative flex items-center justify-center px-4 py-6 sm:px-8 lg:px-12">
 
           <Card className="auth-glass-card w-full max-w-[470px] rounded-[28px] border-white/[.09] bg-[#111317]/85 shadow-[0_32px_100px_rgba(0,0,0,.42)] backdrop-blur-2xl animate-fade-in-up">
-            <CardContent className="space-y-6 p-6 sm:p-8">
-              <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-orange-300/15 bg-orange-400/[.07] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-200">
-                  <Lock className="size-3.5 text-primary" />
-                  Secure Access
-                </div>
-                <div>
-                  <h1 className="text-3xl font-semibold tracking-tight text-balance">
+            <CardContent className="space-y-4 p-6 sm:p-7">
+              <div>
+                  <h1 className="text-2xl font-semibold tracking-tight text-balance">
                     Welcome back
                   </h1>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    Sign in to manage fleets, dispatch operations and transport analytics securely.
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {["RBAC protected", "Enterprise security", "Real-time operations"].map((feature) => (
-                  <span key={feature} className="rounded-full border border-white/[.09] bg-white/[.035] px-3 py-1.5 text-[10px] font-medium text-white/55">{feature}</span>
-                ))}
               </div>
 
               {errorMessage && (
@@ -157,8 +132,8 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <form className="space-y-5" onSubmit={handleSubmit} noValidate>
-                <div className="space-y-2">
+              <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+                <div className="space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
@@ -174,7 +149,7 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <Label htmlFor="password">Password</Label>
                     <Link href="#" className="text-xs font-medium text-primary hover:underline">
@@ -203,8 +178,8 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/[.08] bg-white/[.025] p-4">
-                  <div className="space-y-2">
+                <div className="space-y-3 rounded-2xl border border-white/[.08] bg-white/[.025] p-3.5">
+                  <div className="space-y-1.5">
                     <Label htmlFor="role">Role</Label>
                     <Select value={role} onValueChange={(value) => value && setRole(value)}>
                       <SelectTrigger
@@ -224,20 +199,17 @@ export default function LoginPage() {
                     </Select>
                   </div>
 
-                  <div className="mt-4 flex items-start gap-2 border-t border-border/70 pt-4">
+                  <div className="flex items-center gap-2 border-t border-white/[.07] pt-3">
                     <Checkbox
                       id="remember-me"
                       checked={rememberMe}
                       onCheckedChange={(checked) => setRememberMe(checked)}
                       disabled={isSubmitting}
                     />
-                    <div className="space-y-0.5">
+                    <div>
                       <Label htmlFor="remember-me" className="font-normal text-muted-foreground">
                         Remember me
                       </Label>
-                      <p className="text-xs text-muted-foreground">
-                        Keep this device signed in for 30 days.
-                      </p>
                     </div>
                   </div>
                 </div>
@@ -279,27 +251,6 @@ export default function LoginPage() {
                 </Link>
               </p>
 
-              <div className="space-y-2.5 border-t border-border pt-5">
-                <p className="text-[11px] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                  Access Mapping
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {accessMapping.map(({ label, access, icon: Icon }) => (
-                    <div
-                      key={label}
-                      className="flex items-start gap-2 rounded-2xl border border-border bg-muted/35 p-2.5"
-                    >
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/10">
-                        <Icon className="size-3.5" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="truncate text-xs font-medium">{label}</p>
-                        <p className="truncate text-[11px] text-muted-foreground">{access}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </CardContent>
           </Card>
         </div>
