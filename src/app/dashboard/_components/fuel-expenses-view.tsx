@@ -10,6 +10,7 @@ import {
   Zap,
   TrendingUp,
 } from "lucide-react";
+import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
@@ -62,9 +63,9 @@ export async function FuelExpensesView() {
             <ThemeToggle />
           </div>
           <NotificationMenu />
-          <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+          <Link href="/settings" className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
             <Settings className="h-5 w-5" />
-          </button>
+          </Link>
           <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
             <HelpCircle className="h-5 w-5" />
           </button>

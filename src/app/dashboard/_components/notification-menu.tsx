@@ -45,9 +45,9 @@ export function NotificationMenu({ placement = "bottom" }: { placement?: "top" |
         onClick={() => setIsOpen((open) => !open)}
         aria-label="Open notifications"
         aria-expanded={isOpen}
-        className="relative text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
+        className="relative flex size-5 items-center justify-center text-slate-500 transition-colors hover:text-slate-700 dark:text-slate-400 dark:hover:text-white"
       >
-        <Bell className="size-5" />
+        <Bell className="h-5 w-5" />
         {unread > 0 && <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-orange-500 text-[8px] font-bold text-white">{unread > 9 ? "9+" : unread}</span>}
       </button>
 

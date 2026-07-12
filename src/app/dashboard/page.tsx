@@ -7,8 +7,6 @@ import { FinancialAnalystView, FINANCIAL_ANALYST_LINKS } from "./_components/fin
 import { DriverView, DRIVER_LINKS } from "./_components/driver-view";
 import Link from "next/link";
 import { verifySessionToken } from "@/lib/auth/jwt";
-import { Settings } from "lucide-react";
-import { NotificationMenu } from "./_components/notification-menu";
 
 export const metadata: Metadata = { title: "Dashboard · TransitOps" };
 export const dynamic = "force-dynamic";
@@ -101,13 +99,6 @@ export default async function DashboardPage({
 
         {/* User Session Info */}
         <div className="border-t border-white/[.08] p-4">
-          <div className="mb-3 flex items-center justify-between px-3">
-            <Link href="/settings" className="flex items-center gap-3 rounded-xl py-2.5 text-sm font-medium text-white/55 transition hover:text-white">
-              <Settings className="size-4 text-white/35" />
-              Settings
-            </Link>
-            <NotificationMenu placement="top" />
-          </div>
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-300/20 bg-orange-500/15 font-bold text-orange-300">
               {formatInitials(role)}

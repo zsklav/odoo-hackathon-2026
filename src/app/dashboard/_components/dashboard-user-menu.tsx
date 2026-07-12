@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { LogOut, UserRound } from "lucide-react";
 
 export function DashboardUserMenu() {
@@ -29,7 +30,12 @@ export function DashboardUserMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-12 z-20 w-36 rounded-xl border border-white/[.1] bg-[#171a20] p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
+        <div className="absolute right-0 top-12 z-20 w-40 rounded-xl border border-white/[.1] bg-[#171a20] p-1.5 shadow-2xl shadow-black/40 backdrop-blur-xl">
+          <Link href="/profile" onClick={() => setIsOpen(false)} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-white/75 transition hover:bg-white/[.07]">
+            <UserRound className="size-4" />
+            Profile
+          </Link>
+          <div className="my-1 border-t border-white/[.08]" />
           <button
             type="button"
             onClick={handleLogout}
