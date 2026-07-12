@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { createOrganizationNotification } from "@/lib/notifications";
 
 const VEHICLE_SUMMARY = {
   select: { id: true, registrationNumber: true, name: true, region: true, status: true },
@@ -86,6 +87,13 @@ export async function POST(request: Request) {
       ...(parsedDate ? { date: parsedDate } : {}),
     },
     include: { vehicle: VEHICLE_SUMMARY },
+  });
+
+  await createOrganizationNotification({
+    actorId: user.id,
+    type: "fuel",
+    title: "Fuel log recorded",
+    message: `${fuelLog.liters} L of fuel was recorded for ${fuelLog.vehicle.registrationNumber}.`,
   });
 
   return NextResponse.json(fuelLog, { status: 201 });

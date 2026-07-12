@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { ExpenseType } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { createOrganizationNotification } from "@/lib/notifications";
 
 const VEHICLE_SUMMARY = {
   select: { id: true, registrationNumber: true, name: true, region: true, status: true },
@@ -91,6 +92,13 @@ export async function POST(request: Request) {
       ...(parsedDate ? { date: parsedDate } : {}),
     },
     include: { vehicle: VEHICLE_SUMMARY },
+  });
+
+  await createOrganizationNotification({
+    actorId: user.id,
+    type: "expense",
+    title: "Expense recorded",
+    message: `${expense.type.toLowerCase()} expense of ₹${expense.cost.toLocaleString("en-IN")} was recorded for ${expense.vehicle.registrationNumber}.`,
   });
 
   return NextResponse.json(expense, { status: 201 });

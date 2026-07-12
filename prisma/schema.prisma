@@ -54,10 +54,42 @@ model User {
   role         Role     @default(DRIVER)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  emailNotifications Boolean @default(true)
+  inAppNotifications Boolean @default(true)
 
   createdTrips Trip[] @relation("TripCreatedBy")
+  notificationRecipients NotificationRecipient[]
 
   @@map("users")
+}
+
+model Notification {
+  id        String   @id @default(uuid()) @db.Uuid
+  type      String
+  title     String
+  message   String
+  actorId   String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  recipients NotificationRecipient[]
+
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model NotificationRecipient {
+  id             String   @id @default(uuid()) @db.Uuid
+  notificationId String   @db.Uuid
+  userId         String   @db.Uuid
+  readAt         DateTime?
+  createdAt      DateTime @default(now())
+
+  notification Notification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([notificationId, userId])
+  @@index([userId, readAt])
+  @@map("notification_recipients")
 }
 
 model Vehicle {

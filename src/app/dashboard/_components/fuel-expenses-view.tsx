@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
+import { NotificationMenu } from "./notification-menu";
 import { prisma } from "@/lib/prisma";
 import { TripStatus } from "@/generated/prisma/client";
 
@@ -60,9 +61,7 @@ export async function FuelExpensesView() {
           <div className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
             <ThemeToggle />
           </div>
-          <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
-            <Bell className="h-5 w-5" />
-          </button>
+          <NotificationMenu />
           <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
             <Settings className="h-5 w-5" />
           </button>
