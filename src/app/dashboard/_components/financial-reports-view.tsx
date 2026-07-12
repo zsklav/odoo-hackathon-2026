@@ -1,4 +1,4 @@
-import { Search, Bell, Settings, HelpCircle, Download } from "lucide-react";
+import { Search, Bell, Settings, HelpCircle } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
