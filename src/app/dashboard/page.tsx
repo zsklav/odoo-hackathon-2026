@@ -38,22 +38,27 @@ export default async function DashboardPage({
   const currentLinks = navLinks[role] || navLinks.FLEET_MANAGER;
 
   return (
-    <div className="flex h-screen bg-slate-50 dark:bg-[#0f172a] overflow-hidden">
+    <div className="transit-dashboard relative flex h-screen overflow-hidden bg-[#09090b] text-white">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="auth-grid absolute inset-0 opacity-30" />
+        <div className="absolute -left-48 top-1/4 size-[520px] rounded-full bg-orange-500/[.07] blur-[140px]" />
+        <div className="absolute -right-52 top-0 size-[500px] rounded-full bg-blue-500/[.06] blur-[150px]" />
+      </div>
       {/* Sidebar */}
-      <aside className="w-64 flex flex-col justify-between border-r border-slate-200 bg-white dark:border-slate-700/50 dark:bg-[#162032] shrink-0">
+      <aside className="relative z-10 flex w-64 shrink-0 flex-col justify-between border-r border-white/[.08] bg-[#0c0f14]/90 backdrop-blur-xl">
         <div>
           {/* Logo */}
-          <div className="px-6 pt-8 pb-6">
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Transit<span className="text-[#f58f29]">Ops</span>
+          <div className="border-b border-white/[.06] px-6 pb-6 pt-8">
+            <h1 className="text-2xl font-semibold tracking-[-0.05em] text-white">
+              Transit<span className="text-[#ff7a00]">Ops</span>
             </h1>
-            <p className="text-[11px] uppercase tracking-wider text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="mt-1 text-[10px] font-medium uppercase tracking-[.16em] text-white/40">
               Fleet Control Center
             </p>
           </div>
 
           {/* Navigation Links */}
-          <nav className="px-4 space-y-1">
+          <nav className="space-y-1 px-4 pt-5">
             {currentLinks.map((link, idx) => {
               const Icon = link.icon;
               const tabId = link.label.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-');
@@ -61,16 +66,16 @@ export default async function DashboardPage({
               
               if (isActive) {
                 return (
-                  <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-lg bg-slate-100 dark:bg-slate-700/40 px-3 py-2.5 text-sm font-medium text-slate-900 dark:text-white transition-colors">
-                    <Icon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-xl border border-orange-300/10 bg-orange-500/[.1] px-3 py-2.5 text-sm font-medium text-white transition-colors">
+                    <Icon className="h-4 w-4 text-orange-400" />
                     {link.label}
                   </Link>
                 );
               }
 
               return (
-                <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-400 transition-colors hover:bg-slate-100 dark:hover:bg-slate-800/50 hover:text-slate-900 dark:hover:text-white">
-                  <Icon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                <Link key={idx} href={`/dashboard?role=${role}&tab=${tabId}`} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-white/55 transition-colors hover:bg-white/[.055] hover:text-white">
+                  <Icon className="h-4 w-4 text-white/35" />
                   {link.label}
                 </Link>
               );
@@ -79,14 +84,14 @@ export default async function DashboardPage({
         </div>
 
         {/* User Session Info */}
-        <div className="p-4 border-t border-slate-200 dark:border-slate-700/50">
+        <div className="border-t border-white/[.08] p-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f58f29] font-bold text-orange-950">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border border-orange-300/20 bg-orange-500/15 font-bold text-orange-300">
               {formatInitials(role)}
             </div>
             <div>
-              <p className="text-sm font-bold text-slate-900 dark:text-white">{formatRoleName(role)}</p>
-              <p className="text-[10px] font-semibold tracking-wider text-slate-500 dark:text-slate-400 uppercase">
+              <p className="text-sm font-semibold text-white">{formatRoleName(role)}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-emerald-400/80">
                 Active Session
               </p>
             </div>
@@ -95,7 +100,7 @@ export default async function DashboardPage({
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-[#0f172a] px-8 py-8">
+      <main className="relative z-10 flex-1 overflow-y-auto px-6 py-7 lg:px-8 lg:py-8">
         {/* Render view based on role */}
         {role === "FLEET_MANAGER" && (
           <FleetManagerView searchParams={searchParams} />

@@ -176,6 +176,28 @@
   animation: card-float 8s ease-in-out infinite;
 }
 
+/* Shared command-center surfaces for dashboard cards, tables, and modules. */
+.transit-dashboard main div[class*="rounded-xl"][class*="border"][class*="bg-white"],
+.transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"] {
+  border-color: rgb(255 255 255 / 8%);
+  background-color: rgb(17 19 23 / 88%);
+  box-shadow: 0 16px 38px rgb(0 0 0 / 16%);
+}
+
+.transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"]:hover {
+  border-color: rgb(255 122 0 / 32%);
+  background-color: rgb(255 122 0 / 6%);
+}
+
+.transit-dashboard main thead {
+  background-color: rgb(255 255 255 / 3%) !important;
+  border-color: rgb(255 255 255 / 8%) !important;
+}
+
+.transit-dashboard main tbody tr:hover {
+  background-color: rgb(255 255 255 / 3%) !important;
+}
+
 @keyframes command-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
