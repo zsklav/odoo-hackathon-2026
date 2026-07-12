@@ -4,6 +4,7 @@ import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { LogMaintenanceButton } from "./log-maintenance-button";
 
 export async function MaintenanceView() {
   // Fetch data
@@ -18,6 +19,11 @@ export async function MaintenanceView() {
 
   const vehiclesInShopCount = await prisma.vehicle.count({
     where: { status: "IN_SHOP" },
+  });
+
+  const vehicles = await prisma.vehicle.findMany({
+    select: { id: true, registrationNumber: true },
+    orderBy: { registrationNumber: "asc" }
   });
 
   // MTD Cost calculation
@@ -64,10 +70,7 @@ export async function MaintenanceView() {
           <h1 className="text-xl font-bold text-slate-900 dark:text-white">Maintenance Management</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Track vehicle repairs, schedule services, and monitor fleet health.</p>
         </div>
-        <button className="flex items-center gap-2 rounded-md bg-[#f58f29] px-4 py-2 text-sm font-bold text-orange-950 transition-colors hover:bg-[#e07f20]">
-          <Plus className="h-4 w-4" />
-          Log Maintenance
-        </button>
+        <LogMaintenanceButton vehicles={vehicles} />
       </div>
 
       {/* KPI Cards Row */}
