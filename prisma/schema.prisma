@@ -1,0 +1,168 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  FLEET_MANAGER
+  DRIVER
+  SAFETY_OFFICER
+  FINANCIAL_ANALYST
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  ON_TRIP
+  IN_SHOP
+  RETIRED
+}
+
+enum DriverStatus {
+  AVAILABLE
+  ON_TRIP
+  OFF_DUTY
+  SUSPENDED
+}
+
+enum TripStatus {
+  DRAFT
+  DISPATCHED
+  COMPLETED
+  CANCELLED
+}
+
+enum MaintenanceStatus {
+  OPEN
+  CLOSED
+}
+
+enum ExpenseType {
+  TOLL
+  MAINTENANCE
+  OTHER
+}
+
+/// Read-only reference to public.profiles, populated by a Supabase Auth
+/// trigger (see supabase/migrations/001_profiles.sql). Prisma does not
+/// manage auth.users or this table's inserts/updates.
+model Profile {
+  id        String   @id @db.Uuid
+  fullName  String?  @map("full_name")
+  role      Role     @default(DRIVER)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  createdTrips Trip[] @relation("TripCreatedBy")
+
+  @@map("profiles")
+}
+
+model Vehicle {
+  id                  String        @id @default(uuid()) @db.Uuid
+  registrationNumber  String        @unique
+  name                String
+  type                String
+  maxLoadCapacity     Float
+  odometer            Float         @default(0)
+  acquisitionCost     Float
+  status              VehicleStatus @default(AVAILABLE)
+  region              String
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  trips            Trip[]
+  maintenanceLogs  MaintenanceLog[]
+  fuelLogs         FuelLog[]
+  expenses         Expense[]
+
+  @@index([registrationNumber])
+  @@index([region])
+  @@map("vehicles")
+}
+
+model Driver {
+  id                 String       @id @default(uuid()) @db.Uuid
+  name               String
+  licenseNumber      String       @unique
+  licenseCategory    String
+  licenseExpiryDate  DateTime
+  contactNumber      String
+  safetyScore        Float        @default(100)
+  status             DriverStatus @default(AVAILABLE)
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  trips Trip[]
+
+  @@index([licenseNumber])
+  @@map("drivers")
+}
+
+model Trip {
+  id               String     @id @default(uuid()) @db.Uuid
+  source           String
+  destination      String
+  vehicleId        String     @db.Uuid
+  driverId         String     @db.Uuid
+  cargoWeight      Float
+  plannedDistance  Float
+  actualOdometer   Float?
+  fuelConsumed     Float?
+  status           TripStatus @default(DRAFT)
+  createdById      String     @db.Uuid
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+  driver    Driver  @relation(fields: [driverId], references: [id], onDelete: Restrict)
+  createdBy Profile @relation("TripCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([vehicleId])
+  @@index([driverId])
+  @@index([status])
+  @@map("trips")
+}
+
+model MaintenanceLog {
+  id          String             @id @default(uuid()) @db.Uuid
+  vehicleId   String             @db.Uuid
+  description String
+  cost        Float
+  status      MaintenanceStatus  @default(OPEN)
+  openedAt    DateTime           @default(now())
+  closedAt    DateTime?
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+
+  @@index([vehicleId])
+  @@map("maintenance_logs")
+}
+
+model FuelLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  vehicleId String   @db.Uuid
+  liters    Float
+  cost      Float
+  date      DateTime @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+
+  @@index([vehicleId])
+  @@map("fuel_logs")
+}
+
+model Expense {
+  id        String      @id @default(uuid()) @db.Uuid
+  vehicleId String      @db.Uuid
+  type      ExpenseType
+  cost      Float
+  date      DateTime    @default(now())
+
+  vehicle Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Restrict)
+
+  @@index([vehicleId])
+  @@map("expenses")
+}
