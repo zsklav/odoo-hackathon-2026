@@ -1,4 +1,3 @@
-// npm install --save-dev dotenv (already a transitive dep, but install explicitly if `prisma generate`/`db push` can't find DATABASE_URL)
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
