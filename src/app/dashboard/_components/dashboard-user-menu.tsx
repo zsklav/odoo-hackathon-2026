@@ -17,7 +17,7 @@ export function DashboardUserMenu() {
   }
 
   return (
-    <div className="relative">
+    <div className="dashboard-user-menu relative">
       <button
         type="button"
         onClick={() => setIsOpen((open) => !open)}

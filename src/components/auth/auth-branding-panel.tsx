@@ -34,7 +34,7 @@ export function AuthBrandingPanel() {
       <div className="auth-grid pointer-events-none absolute inset-0 opacity-50" />
       <div className="pointer-events-none absolute -left-32 top-[35%] size-80 rounded-full bg-orange-500/15 blur-[110px]" />
       <div className="pointer-events-none absolute -right-20 top-12 size-72 rounded-full bg-blue-500/10 blur-[120px]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#07090d] via-[#07090d]/80 to-transparent" />
+      <div className="auth-command-shade pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#07090d] via-[#07090d]/80 to-transparent" />
 
       <div className="relative flex w-full flex-col">
         <div className="flex items-center justify-between">
@@ -47,9 +47,6 @@ export function AuthBrandingPanel() {
               <p className="mt-0.5 text-[10px] font-medium uppercase tracking-[0.17em] text-white/45">Smart transport operations</p>
             </div>
           </div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-400/[.07] px-3 py-1.5 text-[9px] font-semibold tracking-[.18em] text-emerald-200">
-            <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#4ade80]" /> LIVE OPERATIONS
-          </span>
         </div>
 
         <div className="relative mx-auto mt-6 flex min-h-[420px] w-full max-w-[620px] items-center justify-center xl:mt-10">

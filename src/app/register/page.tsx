@@ -15,6 +15,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { AuthBrandingPanel } from "@/components/auth/auth-branding-panel";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -87,7 +88,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#09090b] text-white">
+    <div className="auth-page relative min-h-screen overflow-hidden bg-[#09090b] text-white">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -left-24 top-10 size-72 rounded-full bg-primary/10 blur-3xl" />
         <div className="absolute right-0 top-1/4 size-80 rounded-full bg-orange-400/10 blur-3xl" />
@@ -121,8 +122,11 @@ export default function RegisterPage() {
         </div>
 
         <div className="relative flex items-center justify-center px-4 py-6 sm:px-8 lg:px-12">
+          <div className="absolute right-5 top-5 z-10">
+            <ThemeToggle />
+          </div>
 
-          <Card className="auth-glass-card w-full max-w-[470px] rounded-[28px] border-white/[.09] bg-[#111317]/85 shadow-[0_32px_100px_rgba(0,0,0,.42)] backdrop-blur-2xl animate-fade-in-up">
+          <Card className="auth-glass-card auth-light-card w-full max-w-[470px] rounded-[28px] border-white/[.09] bg-[#111317]/85 shadow-[0_32px_100px_rgba(0,0,0,.42)] backdrop-blur-2xl animate-fade-in-up">
             <CardContent className="space-y-4 p-6 sm:p-7">
               <div>
                 <h1 className="text-2xl font-semibold tracking-tight text-balance">
@@ -145,7 +149,7 @@ export default function RegisterPage() {
                     <Input
                       type="text"
                       id="name"
-                      className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
+                      className={`auth-input h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
                       placeholder="Enter your full name"
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
@@ -161,7 +165,7 @@ export default function RegisterPage() {
                     <Input
                       type="email"
                       id="email"
-                      className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
+                      className={`auth-input h-12 rounded-xl border-white/[.1] bg-white/[.04] pl-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
                       placeholder="Enter your email address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -175,7 +179,7 @@ export default function RegisterPage() {
                   <Select value={role} onValueChange={(value) => value && setRole(value)}>
                     <SelectTrigger
                       id="role"
-                      className={`h-11 w-full rounded-xl border-white/[.1] bg-white/[.04] ${inputFocusClass}`}
+                      className={`auth-input h-11 w-full rounded-xl border-white/[.1] bg-white/[.04] ${inputFocusClass}`}
                       disabled={isSubmitting}
                     >
                       <SelectValue placeholder="Select role" />
@@ -197,7 +201,7 @@ export default function RegisterPage() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       id="password"
-                      className={`h-12 rounded-xl border-white/[.1] bg-white/[.04] px-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
+                      className={`auth-input h-12 rounded-xl border-white/[.1] bg-white/[.04] px-9 text-white placeholder:text-white/30 ${inputFocusClass}`}
                       placeholder="Create a password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

@@ -177,25 +177,109 @@
 }
 
 /* Shared command-center surfaces for dashboard cards, tables, and modules. */
-.transit-dashboard main div[class*="rounded-xl"][class*="border"][class*="bg-white"],
-.transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"] {
+.dark .transit-dashboard main div[class*="rounded-xl"][class*="border"][class*="bg-white"],
+.dark .transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"] {
   border-color: rgb(255 255 255 / 8%);
   background-color: rgb(17 19 23 / 88%);
   box-shadow: 0 16px 38px rgb(0 0 0 / 16%);
 }
 
-.transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"]:hover {
+.dark .transit-dashboard main a[class*="rounded-xl"][class*="border"][class*="bg-white"]:hover {
   border-color: rgb(255 122 0 / 32%);
   background-color: rgb(255 122 0 / 6%);
 }
 
-.transit-dashboard main thead {
+.dark .transit-dashboard main thead {
   background-color: rgb(255 255 255 / 3%) !important;
   border-color: rgb(255 255 255 / 8%) !important;
 }
 
-.transit-dashboard main tbody tr:hover {
+.dark .transit-dashboard main tbody tr:hover {
   background-color: rgb(255 255 255 / 3%) !important;
+}
+
+/* Auth pages retain their own polished light surface when the theme is switched. */
+html:not(.dark) .auth-page {
+  background: radial-gradient(circle at 80% 20%, rgb(255 122 0 / 10%), transparent 28%), linear-gradient(135deg, #f8fafc 0%, #f1f5f9 52%, #fff7ed 100%) !important;
+  color: #111827;
+}
+
+html:not(.dark) .auth-page .auth-light-card {
+  border-color: rgb(15 23 42 / 10%);
+  background: rgb(255 255 255 / 82%);
+  box-shadow: 0 28px 80px rgb(15 23 42 / 14%);
+}
+
+html:not(.dark) .auth-page .auth-light-card .auth-input {
+  border-color: rgb(15 23 42 / 12%);
+  background: rgb(15 23 42 / 3%);
+  color: #111827;
+}
+
+html:not(.dark) .auth-page .auth-light-card .auth-input::placeholder {
+  color: rgb(71 85 105 / 65%);
+}
+
+html:not(.dark) .auth-page .auth-light-card [class*="bg-white"] {
+  background-color: rgb(15 23 42 / 3%);
+}
+
+html:not(.dark) .auth-page .auth-light-card [class*="border-white"] {
+  border-color: rgb(15 23 42 / 10%);
+}
+
+html:not(.dark) .auth-page .auth-light-card [class*="text-white"] {
+  color: #1e293b;
+}
+
+html:not(.dark) .auth-command-panel {
+  background: radial-gradient(circle at 78% 20%, rgb(255 245 194 / 55%), transparent 26%), linear-gradient(145deg, #f59e0b 0%, #fb923c 48%, #ea580c 100%) !important;
+}
+
+html:not(.dark) .auth-command-panel .auth-command-shade {
+  background: linear-gradient(to top, rgb(124 45 18 / 72%), rgb(154 52 18 / 32%), transparent) !important;
+}
+
+html:not(.dark) .auth-command-panel .auth-grid {
+  opacity: 0.32;
+}
+
+html:not(.dark) .transit-dashboard {
+  background: radial-gradient(circle at 14% 40%, rgb(255 122 0 / 8%), transparent 27%), linear-gradient(135deg, #f8fafc 0%, #f1f5f9 65%, #fff7ed 100%) !important;
+  color: #0f172a;
+}
+
+html:not(.dark) .transit-dashboard > aside {
+  border-color: rgb(15 23 42 / 10%);
+  background: rgb(255 255 255 / 80%);
+}
+
+html:not(.dark) .transit-dashboard > aside [class*="border-white"] {
+  border-color: rgb(15 23 42 / 8%);
+}
+
+html:not(.dark) .transit-dashboard > aside [class*="text-white"] {
+  color: #334155;
+}
+
+html:not(.dark) .transit-dashboard > aside a[class*="bg-orange"] {
+  background-color: rgb(255 122 0 / 10%);
+  border-color: rgb(255 122 0 / 18%);
+  color: #9a4300;
+}
+
+html:not(.dark) .transit-dashboard > aside a[class*="bg-orange"] svg {
+  color: #e96500;
+}
+
+html:not(.dark) .transit-dashboard .dashboard-user-menu > button,
+html:not(.dark) .transit-dashboard [class*="bg-[#171a20]"] {
+  background-color: #ffffff;
+  border-color: rgb(15 23 42 / 10%);
+}
+
+html:not(.dark) .transit-dashboard .dashboard-user-menu > button {
+  color: #475569;
 }
 
 @keyframes command-float {
