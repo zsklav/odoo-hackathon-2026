@@ -10,6 +10,7 @@ import {
   Loader2,
   Lock,
   Mail,
+  Truck,
   User,
   UserPlus,
 } from "lucide-react";
@@ -32,6 +33,9 @@ const registrableRoles = [
   { label: "Safety Officer", value: "SAFETY_OFFICER" },
   { label: "Financial Analyst", value: "FINANCIAL_ANALYST" },
 ];
+
+const inputFocusClass =
+  "transition-all duration-150 focus-visible:ring-4 focus-visible:ring-primary/20";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -89,16 +93,33 @@ export default function RegisterPage() {
         <AuthBrandingPanel />
       </div>
 
+      {/* Compact top banner replacing the full atmospheric panel below lg */}
+      <div className="relative h-28 overflow-hidden bg-[oklch(0.16_0.02_260)] lg:hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_100%_at_50%_0%,oklch(0.28_0.05_255)_0%,oklch(0.16_0.02_260)_70%)]" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent" />
+        <div className="relative flex h-full items-center gap-3 px-6">
+          <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-lg shadow-primary/30">
+            <Truck className="size-4.5" />
+          </div>
+          <div>
+            <p className="text-base font-bold tracking-tight text-primary">TransitOps</p>
+            <p className="text-xs text-white/60">Smart Transport Operations Platform</p>
+          </div>
+        </div>
+      </div>
+
       <div className="relative flex flex-col items-center justify-center gap-6 px-4 py-10 sm:px-8">
         <div className="absolute right-4 top-4">
           <ThemeToggle />
         </div>
 
-        <Card className="w-full max-w-sm">
-          <CardContent className="space-y-6">
+        <Card className="w-full max-w-sm animate-fade-in-up">
+          <CardContent className="space-y-7">
             <div>
-              <h1 className="text-2xl font-bold">Create an account</h1>
-              <p className="mt-1 text-sm text-muted-foreground">Join TransitOps today.</p>
+              <h1 className="text-3xl font-bold tracking-tight text-balance">
+                Create an account
+              </h1>
+              <p className="mt-1.5 text-sm text-muted-foreground">Join TransitOps today.</p>
             </div>
 
             {errorMessage && (
@@ -108,7 +129,7 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <form className="space-y-4" onSubmit={handleSubmit} noValidate>
+            <form className="space-y-5" onSubmit={handleSubmit} noValidate>
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <div className="relative">
@@ -116,8 +137,8 @@ export default function RegisterPage() {
                   <Input
                     type="text"
                     id="name"
-                    className="pl-8"
-                    placeholder="Enter the full name"
+                    className={`h-10 pl-8 ${inputFocusClass}`}
+                    placeholder="Jordan Reed"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     disabled={isSubmitting}
@@ -132,8 +153,8 @@ export default function RegisterPage() {
                   <Input
                     type="email"
                     id="email"
-                    className="pl-8"
-                    placeholder="Enter the email address"
+                    className={`h-10 pl-8 ${inputFocusClass}`}
+                    placeholder="you@transitops.in"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
@@ -141,10 +162,14 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 rounded-xl border border-border bg-muted/30 p-3.5">
                 <Label htmlFor="role">Select Role</Label>
                 <Select value={role} onValueChange={(value) => value && setRole(value)}>
-                  <SelectTrigger id="role" className="w-full" disabled={isSubmitting}>
+                  <SelectTrigger
+                    id="role"
+                    className={`h-10 w-full bg-background ${inputFocusClass}`}
+                    disabled={isSubmitting}
+                  >
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
@@ -167,8 +192,8 @@ export default function RegisterPage() {
                   <Input
                     type={showPassword ? "text" : "password"}
                     id="password"
-                    className="px-8"
-                    placeholder="Enter your password"
+                    className={`h-10 px-8 ${inputFocusClass}`}
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isSubmitting}
@@ -177,14 +202,18 @@ export default function RegisterPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     aria-label={showPassword ? "Hide password" : "Show password"}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
               </div>
 
-              <Button type="submit" className="w-full gap-2" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                className="h-10 w-full gap-2 transition-all duration-150 hover:shadow-lg hover:shadow-primary/20"
+                disabled={isSubmitting}
+              >
                 {isSubmitting ? (
                   <>
                     Creating account…
