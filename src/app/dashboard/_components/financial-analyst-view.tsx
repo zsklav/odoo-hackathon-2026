@@ -4,6 +4,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { DashboardUserMenu } from "./dashboard-user-menu";
 import { NotificationMenu } from "./notification-menu";
 import { FuelExpensesView } from "./fuel-expenses-view";
+import { FinancialReportsView } from "./financial-reports-view";
 
 export const FINANCIAL_ANALYST_LINKS = [
   { label: "Dashboard", icon: LayoutGrid },
@@ -23,6 +24,10 @@ export async function FinancialAnalystView({
 
   if (tab === "fuel-expenses") {
     return <FuelExpensesView />;
+  }
+
+  if (tab === "reports") {
+    return <FinancialReportsView />;
   }
 
   if (tab !== "dashboard") {
