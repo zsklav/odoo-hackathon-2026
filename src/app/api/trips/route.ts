@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { TripStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { createOrganizationNotification } from "@/lib/notifications";
 
 const VEHICLE_SUMMARY = {
   select: { id: true, registrationNumber: true, name: true, maxLoadCapacity: true, status: true },
@@ -118,6 +119,13 @@ export async function POST(request: Request) {
       createdById: user.id,
     },
     include: { vehicle: VEHICLE_SUMMARY, driver: DRIVER_SUMMARY },
+  });
+
+  await createOrganizationNotification({
+    actorId: user.id,
+    type: "trip",
+    title: "Trip scheduled",
+    message: `A trip from ${trip.source} to ${trip.destination} was scheduled.`,
   });
 
   return NextResponse.json(trip, { status: 201 });

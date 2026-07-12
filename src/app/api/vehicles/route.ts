@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { VehicleStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { createOrganizationNotification } from "@/lib/notifications";
 
 async function requireSession() {
   const cookieStore = await cookies();
@@ -117,6 +118,13 @@ export async function POST(request: Request) {
       status: (status as (typeof VehicleStatus)[keyof typeof VehicleStatus]) ?? VehicleStatus.AVAILABLE,
       region,
     },
+  });
+
+  await createOrganizationNotification({
+    actorId: user.id,
+    type: "vehicle",
+    title: "Vehicle added",
+    message: `${vehicle.name} (${vehicle.registrationNumber}) was added to the fleet.`,
   });
 
   return NextResponse.json(vehicle, { status: 201 });

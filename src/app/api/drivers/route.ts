@@ -4,6 +4,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { DriverStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
+import { createOrganizationNotification } from "@/lib/notifications";
 
 async function requireSession() {
   const cookieStore = await cookies();
@@ -116,6 +117,13 @@ export async function POST(request: Request) {
       safetyScore: (safetyScore as number | undefined) ?? 100,
       status: (status as (typeof DriverStatus)[keyof typeof DriverStatus]) ?? DriverStatus.AVAILABLE,
     },
+  });
+
+  await createOrganizationNotification({
+    actorId: user.id,
+    type: "driver",
+    title: "Driver added",
+    message: `${driver.name} was added to the driver registry.`,
   });
 
   return NextResponse.json(driver, { status: 201 });
