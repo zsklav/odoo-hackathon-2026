@@ -1,11 +1,10 @@
 import Link from "next/link";
-import { LayoutGrid, DollarSign, Fuel, Map, BarChart3, ArrowRight } from "lucide-react";
+import { LayoutGrid, DollarSign, Fuel, BarChart3, ArrowRight } from "lucide-react";
 import { FuelExpensesView } from "./fuel-expenses-view";
 
 export const FINANCIAL_ANALYST_LINKS = [
   { label: "Dashboard", icon: LayoutGrid },
   { label: "Fuel & Expenses", icon: Fuel },
-  { label: "Trip Management", icon: Map },
   { label: "Reports", icon: BarChart3 },
 ];
 
