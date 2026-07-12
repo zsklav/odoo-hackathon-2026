@@ -1,0 +1,121 @@
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { Prisma } from "@/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
+import { verifySessionToken } from "@/lib/auth/jwt";
+
+const VEHICLE_SUMMARY = {
+  select: { id: true, registrationNumber: true, name: true, region: true, status: true },
+} as const;
+
+async function requireSession() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+  if (!token) return null;
+  const payload = verifySessionToken(token);
+  if (!payload) return null;
+  return prisma.user.findUnique({ where: { id: payload.userId } });
+}
+
+function parseDate(value: unknown) {
+  if (value === undefined) return undefined;
+  if (typeof value !== "string" || !value.trim()) return null;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+}
+
+export async function GET(_request: Request, ctx: RouteContext<"/api/fuel-logs/[id]">) {
+  const user = await requireSession();
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
+  const { id } = await ctx.params;
+  const fuelLog = await prisma.fuelLog.findUnique({
+    where: { id },
+    include: { vehicle: VEHICLE_SUMMARY },
+  });
+  if (!fuelLog) {
+    return NextResponse.json({ error: "Fuel log not found." }, { status: 404 });
+  }
+
+  return NextResponse.json(fuelLog);
+}
+
+export async function PATCH(request: Request, ctx: RouteContext<"/api/fuel-logs/[id]">) {
+  const user = await requireSession();
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
+  const { id } = await ctx.params;
+  const existing = await prisma.fuelLog.findUnique({ where: { id } });
+  if (!existing) {
+    return NextResponse.json({ error: "Fuel log not found." }, { status: 404 });
+  }
+
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object") {
+    return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
+  }
+
+  const { vehicleId, liters, cost, date } = body as Record<string, unknown>;
+  const data: Prisma.FuelLogUpdateInput = {};
+
+  if (vehicleId !== undefined) {
+    if (typeof vehicleId !== "string" || !vehicleId.trim()) {
+      return NextResponse.json({ error: "A vehicle must be selected." }, { status: 400 });
+    }
+    const vehicle = await prisma.vehicle.findUnique({ where: { id: vehicleId } });
+    if (!vehicle) {
+      return NextResponse.json({ error: "Selected vehicle does not exist." }, { status: 400 });
+    }
+    data.vehicle = { connect: { id: vehicleId } };
+  }
+
+  if (liters !== undefined) {
+    if (typeof liters !== "number" || !Number.isFinite(liters) || liters <= 0) {
+      return NextResponse.json({ error: "Liters must be a positive number." }, { status: 400 });
+    }
+    data.liters = liters;
+  }
+
+  if (cost !== undefined) {
+    if (typeof cost !== "number" || !Number.isFinite(cost) || cost <= 0) {
+      return NextResponse.json({ error: "Cost must be a positive number." }, { status: 400 });
+    }
+    data.cost = cost;
+  }
+
+  if (date !== undefined) {
+    const parsedDate = parseDate(date);
+    if (parsedDate === null) {
+      return NextResponse.json({ error: "Date must be a valid date." }, { status: 400 });
+    }
+    data.date = parsedDate;
+  }
+
+  const fuelLog = await prisma.fuelLog.update({
+    where: { id },
+    data,
+    include: { vehicle: VEHICLE_SUMMARY },
+  });
+
+  return NextResponse.json(fuelLog);
+}
+
+export async function DELETE(_request: Request, ctx: RouteContext<"/api/fuel-logs/[id]">) {
+  const user = await requireSession();
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  }
+
+  const { id } = await ctx.params;
+  const existing = await prisma.fuelLog.findUnique({ where: { id } });
+  if (!existing) {
+    return NextResponse.json({ error: "Fuel log not found." }, { status: 404 });
+  }
+
+  await prisma.fuelLog.delete({ where: { id } });
+  return NextResponse.json({ ok: true });
+}
