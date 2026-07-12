@@ -8,6 +8,7 @@ import {
 import { FilterBar } from "./filter-bar";
 import { VehiclePill } from "./vehicle-pill";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { DashboardUserMenu } from "./dashboard-user-menu";
 import { MaintenanceView } from "./maintenance-view";
 import {
   Search,
@@ -176,13 +177,7 @@ export async function FleetManagerView({
           <button className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
             <HelpCircle className="h-5 w-5" />
           </button>
-          <div className="h-9 w-9 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700 ring-2 ring-slate-100 dark:ring-slate-800">
-            <img
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-              alt="Avatar"
-              className="h-full w-full object-cover"
-            />
-          </div>
+          <DashboardUserMenu />
         </div>
       </div>
 
