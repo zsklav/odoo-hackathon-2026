@@ -5,6 +5,7 @@ import { ExpenseType } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
 import { createOrganizationNotification } from "@/lib/notifications";
+import { requireRole } from "@/lib/auth/roles";
 
 const VEHICLE_SUMMARY = {
   select: { id: true, registrationNumber: true, name: true, region: true, status: true },
@@ -52,10 +53,7 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const user = await requireSession();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
-  }
+  const { user, response } = await requireRole(["FLEET_MANAGER", "FINANCIAL_ANALYST"]); if (response) return response;
 
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== "object") {

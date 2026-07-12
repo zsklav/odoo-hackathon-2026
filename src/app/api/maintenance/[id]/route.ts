@@ -4,6 +4,7 @@ import { MaintenanceStatus, VehicleStatus } from "@/generated/prisma/enums";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth/jwt";
 import { createOrganizationNotification } from "@/lib/notifications";
+import { requireRole } from "@/lib/auth/roles";
 
 async function requireSession() {
   const cookieStore = await cookies(); const token = cookieStore.get("session")?.value;
@@ -19,7 +20,7 @@ export async function GET(_request: Request, ctx: RouteContext<"/api/maintenance
 }
 
 export async function PATCH(request: Request, ctx: RouteContext<"/api/maintenance/[id]">) {
-  const user = await requireSession(); if (!user) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  const { user, response } = await requireRole(["FLEET_MANAGER"]); if (response) return response;
   const { id } = await ctx.params; const body = await request.json().catch(() => null);
   if (body?.action !== "close") return NextResponse.json({ error: "Invalid maintenance action." }, { status: 400 });
   const existing = await prisma.maintenanceLog.findUnique({ where: { id }, include: { vehicle: true } });
@@ -35,7 +36,7 @@ export async function PATCH(request: Request, ctx: RouteContext<"/api/maintenanc
 }
 
 export async function DELETE(_request: Request, ctx: RouteContext<"/api/maintenance/[id]">) {
-  const user = await requireSession(); if (!user) return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+  const { response } = await requireRole(["FLEET_MANAGER"]); if (response) return response;
   const { id } = await ctx.params;
   const log = await prisma.maintenanceLog.findUnique({ where: { id } });
   if (!log) return NextResponse.json({ error: "Maintenance log not found." }, { status: 404 });
